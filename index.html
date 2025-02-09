@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>DOWNLOADER PROJECT BY YUDZXML</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Downloader YouTube, Instagram, dan TikTok</h1>
+        <div class="input-group">
+            <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, atau TikTok">
+            <button id="downloadBtn" class="animated-button">Download</button>
+        </div>
+        <select id="quality">
+            <option value="video">Video</option>
+            <option value="mp3">MP3</option>
+        </select>
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <span>Downloading...</span>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
