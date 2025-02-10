@@ -7,11 +7,24 @@
     <title>DOWNLOADER PROJECT BY YUDZXML</title>
 </head>
 <body>
+    <video autoplay muted loop id="background-video">
+        <source src="https://i.imghippo.com/files/CIx7362ag.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="audio-container">
+        <!-- Elemen audio dengan autoplay dan loop -->
+        <audio id="sound" autoplay loop>
+            <source src="https://i.imghippo.com/files/edS2120WDY.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
     <div class="container">
-        <h1>Downloader YouTube, Instagram, dan TikTok</h1>
+        <h1>Downloader YouTube, Instagram, TikTok Dan Spotify</h1>
         <div class="input-group">
             <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, atau TikTok">
-            <button id="downloadBtn" class="animated-button">Download</button>
+            <button id="downloadBtn" class="animated-button">🔎</button>
         </div>
         <select id="quality">
             <option value="video">Video</option>
@@ -22,7 +35,18 @@
             <span>Downloading...</span>
         </div>
         <div id="result"></div>
+        <!-- Tombol Contact Owner -->
+        <div class="contact-owner">
+            <button id="contactOwnerBtn" class="animated-button" onclick="contactOwner()">ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ</button>
+        </div>
     </div>
+
     <script src="script.js"></script>
+    <script>
+        function contactOwner() {
+            // Mengarahkan ke URL kontak
+            window.open('https://yudzxml.x-server.web.id/', '_blank');
+        }
+    </script>
 </body>
 </html>

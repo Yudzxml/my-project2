@@ -1,17 +1,33 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #121212; /* Latar belakang gelap */
     color: #ffffff; /* Warna teks putih */
+    font-size: 10px;
     text-align: center;
+    padding: 15px 0;
+    min-height: 100vh;
+    position: relative; /* Menambahkan posisi relatif untuk kontainer */
+    overflow: auto; /* Mengizinkan scroll jika konten melebihi tinggi viewport */
+    margin: 0; /* Menghapus margin default */
+}
+
+#background-video {
+    position: fixed; /* Memposisikan video secara tetap */
+    top: 0;
+    left: 0;
+    width: 100vw; /* Mengatur lebar video 100% dari viewport */
+    height: 100vh; /* Mengatur tinggi video 100% dari viewport */
+    object-fit: cover; /* Memastikan video menutupi seluruh area */
+    z-index: -1; /* Menempatkan video di belakang konten */
 }
 
 .container {
     max-width: 600px;
-    margin: 50px auto;
     padding: 20px;
-    background: #1e1e1e; /* Latar belakang kontainer abu-abu gelap */
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Bayangan untuk kontainer */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin: 80px auto; /* Menambahkan margin atas untuk menurunkan konten */
+    overflow: auto; /* Mengizinkan scroll jika konten melebihi tinggi kontainer */
 }
 
 .input-group {
@@ -31,13 +47,13 @@ input {
 }
 
 button {
-    padding: 5 20px; /* Padding horizontal untuk tombol */
+    padding: 15px 15px; /* Padding horizontal untuk tombol */
     border: none;
     border-radius: 0 5px 5px 0; /* Membulatkan sudut kanan */
-    background-color: #28a745; /* Warna tombol download */
+    background-color: #0056b3; /* Warna tombol download */
     color: white;
     cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
-    font-size: 14px; /* Ukuran font */
+    font-size: 10px; /* Ukuran font */
     height: 40px; /* Menetapkan tinggi tombol agar sama dengan input */
 }
 
@@ -77,4 +93,51 @@ select {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Gaya untuk tombol Contact Owner */
+.contact-owner {
+    margin-top: 20px; /* Jarak atas untuk memisahkan dari konten sebelumnya */
+}
+
+.contact-owner button {
+    padding: 10px 20px; /* Padding untuk tombol */
+    border: none;
+    border-radius: 5px; /* Membulatkan sudut tombol */
+    background-color: #007bff; /* Warna tombol Contact Owner */
+    color: white;
+    cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
+    font-size: 14px; /* Ukuran font */
+    transition: background-color 0.3s; /* Transisi untuk efek hover */
+}
+
+.contact-owner button:hover {
+    background-color: #0056b3; /* Warna saat hover */
+}
+
+/* Kontainer untuk elemen audio */
+.audio-container {
+    display: none; /* Menyembunyikan kontainer audio jika tidak diperlukan */
+}
+
+.download-button {
+    display: inline-flex; /* Menampilkan tombol sebagai flex */
+    align-items: center; /* Memusatkan konten secara vertikal */
+    background-color: #0056b3; /* Warna latar belakang tombol */
+    border: none; /* Menghapus border */
+    border-radius: 5px; /* Membulatkan sudut */
+    padding: 5px 10px; /* Padding untuk tombol */
+    color: white; /* Warna teks */
+    text-decoration: none; /* Menghapus garis bawah */
+    margin-left: 10px; /* Jarak antara teks dan tombol */
+    transition: background-color 0.3s; /* Transisi untuk efek hover */
+}
+
+.download-button:hover {
+    background-color: #218838; /* Warna saat hover */
+}
+
+.download-button img {
+    margin-right: 5px; /* Jarak antara ikon dan teks */
+    vertical-align: middle; /* Memastikan ikon sejajar dengan teks */
 }
