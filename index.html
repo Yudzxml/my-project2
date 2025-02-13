@@ -3,65 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Downloader untuk YouTube, Instagram, TikTok, dan Spotify. Masukkan URL dan unduh dengan mudah.">
     <link rel="stylesheet" href="style.css">
-    <title>DOWNLOADER PROJECT BY YUDZXML</title>
+    <title>Downloader Project by YudzXML</title>
 </head>
 <body>
-    <video autoplay muted loop id="background-video">
+    <video autoplay muted loop id="background-video" aria-label="Latar belakang video">
         <source src="https://i.imghippo.com/files/CIx7362ag.mp4" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
     <div class="audio-container">
-        <!-- Elemen audio dengan loop, tetapi tidak autoplay -->
-        <audio id="sound" loop>
+        <audio id="sound" loop aria-label="Audio latar belakang">
             <source src="https://i.imghippo.com/files/edS2120WDY.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
+</div>
+
+    <div id="welcome-notification" class="notification">
+    <div class="notification-content">
+        <h2>WELCOME TO DOWN4EVER BY YUDZXML</h2>
+        <p>Tekan Ok Untuk Melanjutkan!</p>
+        <button id="close-notification" class="close-button">OK</button>
     </div>
+</div>
 
     <div class="container">
-        <h1>Downloader YouTube, Instagram, TikTok Dan Spotify</h1>
+        <h1>DOWN4EVER</h1>
+        <p>Masukkan URL video yang ingin Anda unduh di bawah ini:</p>
         <div class="input-group">
-            <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, atau TikTok">
-            <button id="downloadBtn" class="animated-button">🔎</button>
+            <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, spotify, atau TikTok" aria-label="URL video">
+            <button id="downloadBtn" class="animated-button" aria-label="Tombol unduh">🔎</button>
         </div>
-        <select id="quality">
-            <option value="video">Video</option>
-            <option value="mp3">MP3</option>
+        <select id="quality" aria-label="Pilih kualitas">
+            <option value="mp4">Video</option>
+            <option value="mp3">Audio</option>
         </select>
         <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
             <span>Downloading...</span>
         </div>
         <div id="result"></div>
-        <!-- Tombol Contact Owner -->
         <div class="contact-owner">
-            <button id="contactOwnerBtn" class="animated-button" onclick="contactOwner()">ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ</button>
+            <button id="contactOwnerBtn" class="animated-button" onclick="contactOwner()" aria-label="Kontak pemilik">ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ</button>
         </div>
+        <div class="copyright">
+    &copy; 2025 Yudzxml. All rights reserved.
+</div>
     </div>
 
     <script src="script.js"></script>
     <script>
         function contactOwner() {
-            // Mengarahkan ke URL kontak
             window.open('https://yudzxml.x-server.web.id/', '_blank');
         }
 
-        // Mendapatkan elemen audio
         var audio = document.getElementById('sound');
 
-        // Menambahkan event listener untuk klik
         document.addEventListener('click', function() {
             playAudio();
         });
 
-        // Menambahkan event listener untuk gerakan mouse
         document.addEventListener('mousemove', function() {
             playAudio();
         });
 
-        // Fungsi untuk memutar audio
         function playAudio() {
             audio.play().catch(function(error) {
                 console.log("Audio tidak dapat diputar: ", error);

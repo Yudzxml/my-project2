@@ -1,49 +1,50 @@
 body {
     font-family: 'Arial', sans-serif;
     color: #ffffff; /* Warna teks putih */
-    font-size: 10px;
+    font-size: 14px; /* Ukuran font yang lebih besar */
     text-align: center;
     padding: 15px 0;
     min-height: 100vh;
-    position: relative; /* Menambahkan posisi relatif untuk kontainer */
-    overflow: auto; /* Mengizinkan scroll jika konten melebihi tinggi viewport */
-    margin: 0; /* Menghapus margin default */
+    position: relative;
+    overflow: auto;
+    margin: 0;
 }
 
 #background-video {
-    position: fixed; /* Memposisikan video secara tetap */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* Mengatur lebar video 100% dari viewport */
-    height: 100vh; /* Mengatur tinggi video 100% dari viewport */
-    object-fit: cover; /* Memastikan video menutupi seluruh area */
-    z-index: -1; /* Menempatkan video di belakang konten */
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
 }
 
 .container {
     max-width: 600px;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7); /* Latar belakang lebih gelap untuk kontras yang lebih baik */
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    margin: 80px auto; /* Menambahkan margin atas untuk menurunkan konten */
-    overflow: auto; /* Mengizinkan scroll jika konten melebihi tinggi kontainer */
+    margin: 80px auto;
+    font-size: 15px;
+    
 }
 
 .input-group {
-    display: flex; /* Mengatur input dan tombol dalam satu baris */
+    display: flex;
 }
 
 input {
-    flex: 1; /* Membuat input mengambil sisa ruang */
-    padding: 10px; /* Padding untuk input */
-    margin: 0; /* Menghapus margin untuk input */
+    flex: 1;
+    padding: 10px;
+    margin: 0;
     border: none;
-    border-radius: 5px 0 0 5px; /* Membulatkan sudut kiri */
-    background-color: #333; /* Latar belakang input */
-    color: #fff; /* Warna teks input */
-    font-size: 14px; /* Ukuran font */
-    height: 20px; /* Menetapkan tinggi input */
+    border-radius: 5px 0 0 5px;
+    background-color: #333;
+    color: #fff;
+    font-size: 14px;
+    height: 40px; /* Tinggi input disesuaikan */
 }
 
 button {
@@ -53,8 +54,9 @@ button {
     background-color: #0056b3; /* Warna tombol download */
     color: white;
     cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
-    font-size: 10px; /* Ukuran font */
-    height: 40px; /* Menetapkan tinggi tombol agar sama dengan input */
+    font-size: 14px; /* Ukuran font yang lebih besar */
+    height: 60px; /* Menetapkan tinggi tombol agar sama dengan input */
+    transition: background-color 0.3s; /* Transisi untuk efek hover */
 }
 
 button:hover {
@@ -97,17 +99,18 @@ select {
 
 /* Gaya untuk tombol Contact Owner */
 .contact-owner {
-    margin-top: 20px; /* Jarak atas untuk memisahkan dari konten sebelumnya */
+    margin-top: 15px; /* Jarak atas untuk memisahkan dari konten sebelumnya */
 }
 
 .contact-owner button {
-    padding: 10px 20px; /* Padding untuk tombol */
+    padding: 10px 5px; /* Padding untuk tombol */
     border: none;
-    border-radius: 5px; /* Membulatkan sudut tombol */
+    border-radius: 10px; /* Membulatkan sudut tombol */
     background-color: #007bff; /* Warna tombol Contact Owner */
     color: white;
     cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
     font-size: 14px; /* Ukuran font */
+    height: 50px;
     transition: background-color 0.3s; /* Transisi untuk efek hover */
 }
 
@@ -140,4 +143,50 @@ select {
 .download-button img {
     margin-right: 5px; /* Jarak antara ikon dan teks */
     vertical-align: middle; /* Memastikan ikon sejajar dengan teks */
+}
+
+.copyright {
+    margin-top: 20px; /* Jarak atas untuk memisahkan dari konten sebelumnya */
+    font-size: 12px; /* Ukuran font untuk copyright */
+    color: #ffffff; /* Warna teks putih */
+    text-align: center; /* Pusatkan teks */
+}
+
+.notification {
+    position: fixed;
+    top: 0; /* Menutupi bagian atas layar */
+    left: 0; /* Menutupi sisi kiri layar */
+    width: 100%; /* Lebar 100% untuk menutupi seluruh layar */
+    height: 100%; /* Tinggi 100% untuk menutupi seluruh layar */
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang gelap dengan transparansi */
+    display: flex; /* Menggunakan flexbox untuk tata letak */
+    align-items: center; /* Memusatkan konten secara vertikal */
+    justify-content: center; /* Memusatkan konten secara horizontal */
+    z-index: 1000; /* Pastikan notifikasi di atas elemen lain */
+}
+
+.notification-content {
+    background-color: #ffffff; /* Latar belakang putih untuk konten notifikasi */
+    color: #000000; /* Warna teks hitam */
+    padding: 20px; /* Padding untuk konten */
+    border-radius: 10px; /* Membulatkan sudut */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek kedalaman */
+    text-align: center; /* Pusatkan teks */
+    max-width: 400px; /* Lebar maksimum untuk notifikasi */
+    width: 90%; /* Lebar 90% dari layar */
+}
+
+.close-button {
+    background-color: #007bff; /* Warna tombol */
+    color: #ffffff; /* Warna teks putih */
+    border: none; /* Tanpa border */
+    border-radius: 5px; /* Membulatkan sudut tombol */
+    padding: 10px 20px; /* Padding untuk tombol */
+    cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
+    margin-top: 15px; /* Jarak atas untuk tombol */
+    transition: background-color 0.3s; /* Transisi untuk efek hover */
+}
+
+.close-button:hover {
+    background-color: #0056b3; /* Warna saat hover */
 }
