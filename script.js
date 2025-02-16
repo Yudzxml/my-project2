@@ -39,100 +39,144 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
 
 // Fungsi untuk menangani download YouTube
 async function handleYouTubeDownload(url, quality, resultDiv, loadingDiv) {
-    const VideoId = url
     if (!url) {
         resultDiv.innerHTML = "<p style='color: red;'>URL tidak valid. Silakan masukkan URL YouTube yang benar.</p>";
         return;
     }
+    
+    const formatAudio = ['mp3', 'm4a', 'webm', 'aac', 'flac', 'opus', 'ogg', 'wav'];
+    const formatVideo = ['360', '480', '720', '1080', '1440', '4k'];
+
+    const ddownr = {
+        download: async (url, format) => {
+            if (!formatAudio.includes(format) && !formatVideo.includes(format)) {
+                throw new Error('Format tidak didukung, silakan cek kembali daftar format yang tersedia.');
+            }
+
+            const config = {
+                method: 'GET',
+                url: `https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                }
+            };
+
+            try {
+                const response = await axios.request(config);
+                if (response.data && response.data.success) {
+                    const { id, title, info } = response.data;
+                    const { image } = info;
+                    const downloadUrl = await ddownr.cekProgress(id);
+
+                    return {
+                        id: id,
+                        image: image,
+                        title: title,
+                        downloadUrl: downloadUrl
+                    };
+                } else {
+                    throw new Error('Gagal mengambil detail video.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        },
+        cekProgress: async (id) => {
+            const config = {
+                method: 'GET',
+                url: `https://p.oceansaver.in/ajax/progress.php?id=${id}`,
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+                }
+            };
+
+            try {
+                while (true) {
+                    const response = await axios.request(config);
+                    if (response.data && response.data.success && response.data.progress === 1000) {
+                        return response.data.download_url;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 5000));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                throw error;
+            }
+        }
+    };
 
     const downloadText = quality === "mp3" ? `DOWNLOAD MP3: ` : `DOWNLOAD MP4: `;
-    const apiUrl = quality === "mp3" 
-        ? `https://api.agatz.xyz/api/ytmp3?url=${VideoId}`
-        : `https://api.agatz.xyz/api/ytmp4?url=${VideoId}`;
-    
+    let videoInfo, downloadUrl;
+
     try {
-        // Mengambil data dari API ytmp3 atau ytmp4
-        const response1 = await fetch(apiUrl);
-        const data1 = await response1.json();
-        // Memastikan response1 berhasil
-        if (data1.status !== 200) {
-            throw new Error("Gagal mengambil data dari API ytmp3 atau ytmp4");
-        }
-
-        const response2 = await fetch(`https://api.agatz.xyz/api/ytsearch?message=${encodeURIComponent(url)}`);
+        // Fetch video details using the new API
+        const apiUrl = `https://restapi.apibotwa.biz.id/api/search-yts?message=${encodeURIComponent(url)}`;
+        const response2 = await fetch(apiUrl);
         const data2 = await response2.json();
-        // Memastikan response2 berhasil
-        if (data2.status !== 200) {
-            throw new Error("Gagal mengambil data dari API ytsearch");
+
+        if (data2.status !== 200 || !data2.data.response.video.length) {
+            resultDiv.innerHTML = "<p style='color: red;'>Tidak ada video yang ditemukan.</p>";
+            return;
         }
 
-        loadingDiv.style.display = 'none';
+        videoInfo = data2.data.response.video[0]; // Get the first video from the response
 
         if (quality === "mp3") {
-            let downloadLinks = '';
-            const videoInfo = data2.data[0];
+            // Fetch MP3 download link using the new API
+            const mp3ApiUrl = `https://ditzdevs-yt2apps.hf.space/api/ytmp3?url=${encodeURIComponent(url)}`;
+            const mp3Response = await fetch(mp3ApiUrl);
+            const mp3Data = await mp3Response.json();
 
-            // Memastikan ada data audio
-            if (data1.data.length === 0) {
+            if (!mp3Data.status) {
                 resultDiv.innerHTML = "<p style='color: red;'>Tidak ada audio yang tersedia.</p>";
                 return;
             }
 
-            data1.data.forEach(audio => {
-                downloadLinks += `
-                <p>
-                    <strong>${audio.quality}</strong>: 
-                    <a href="${audio.downloadUrl}" target="_blank" class="download-button">
-                        <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
-                    </a>
-                </p>
-                `;
-            });
+            const downloadLink = mp3Data.download.downloadUrl;
 
             resultDiv.innerHTML = `
-            <div style="text-align: center;">
-                <h2>${videoInfo.title}</h2>
-                <img src="${videoInfo.thumbnail}" alt="${videoInfo.title}" style="max-width: 100%; height: auto; border-radius: 8px;">
-                <p>${downloadText}</p>
-                ${downloadLinks}
-                <p><strong>Deskripsi:</strong> ${videoInfo.description || 'Tidak ada deskripsi.'}</p>
-                <p><strong>Durasi:</strong> ${videoInfo.duration || 'Tidak tersedia'} detik</p>
-                <p><strong>Jumlah Tampilan:</strong> ${videoInfo.views || 'Tidak tersedia'}</p>
-                <p><strong>Pengarang:</strong> <a href="${videoInfo.author.url}" target="_blank">${videoInfo.author.name}</a></p>
-                <p><strong>Diunggah:</strong> ${videoInfo.ago || 'Tidak tersedia'}</p>
-            </div>
+                <div style="text-align: center;">
+                    <h2>${mp3Data.download.title}</h2>
+                    <img src="${videoInfo.thumbnail}" alt="${videoInfo.title}" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <p>${downloadText}
+                        <a href="${downloadLink}" target="_blank" class="download-button">
+                            <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
+                        </a>
+                    </p>
+                    <p><strong>Deskripsi:</strong> ${videoInfo.description || 'Tidak ada deskripsi.'}</p>
+                    <p><strong>Durasi:</strong> ${videoInfo.durationH || 'Tidak tersedia'}</p>
+                    <p><strong>Jumlah Tampilan:</strong> ${videoInfo.viewH || 'Tidak tersedia'}</p>
+                    <p><strong>Pengarang:</strong> <a href="${videoInfo.url}" target="_blank">${videoInfo.authorName}</a></p>
+                    <p><strong>Diunggah:</strong> ${videoInfo.publishedTime || 'Tidak tersedia'}</p>
+                </div>
             `;
         } else if (quality === "mp4") {
-            const videoInfo = data2.data[0];
-            const videoData = data1.data; // Mengambil data dari ytmp4
-
-            // Memastikan ada data video
-            if (!videoData.success) {
-                resultDiv.innerHTML = "<p style='color: red;'>Tidak ada video yang tersedia.</p>";
-                return;
-            }
+            const videoData = await ddownr.download(url, "720");
+            downloadUrl = videoData.downloadUrl;
 
             resultDiv.innerHTML = `
-            <div style="text-align: center;">
-                <h2>${videoData.title}</h2>
-                <img src="${videoData.image}" alt="${videoData.title}" style="max-width: 100%; height: auto; border-radius: 8px;">
-                <p>${downloadText}
-                    <a href="${videoData.downloadUrl}" target="_blank" class="download-button">
-                        <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
-                    </a>
-                </p>
-                <p><strong>Deskripsi:</strong> ${videoInfo.description || 'Tidak ada deskripsi.'}</p>
-                <p><strong>Durasi:</strong> ${videoInfo.duration || 'Tidak tersedia'} detik</p>
-                <p><strong>Jumlah Tampilan:</strong> ${videoInfo.views || 'Tidak tersedia'}</p>
-                <p><strong>Pengarang:</strong> <a href="${videoInfo.author.url}" target="_blank">${videoInfo.author.name}</a></p>
-                <p><strong>Diunggah:</strong> ${videoInfo.ago || 'Tidak tersedia'}</p>
-            </div>
+                <div style="text-align: center;">
+                    <h2>${videoData.title}</h2>
+                    <img src="${videoData.image}" alt="${videoData.title}" style="max-width: 100%; height: auto; border-radius: 8px;">
+                    <p>${downloadText}
+                        <a href="${downloadUrl}" target="_blank" class="download-button">
+                            <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
+                        </a>
+                    </p>
+                    <p><strong>Deskripsi:</strong> ${videoInfo.description || 'Tidak ada deskripsi.'}</p>
+                    <p><strong>Durasi:</strong> ${videoInfo.durationH || 'Tidak tersedia'}</p>
+                    <p><strong>Jumlah Tampilan:</strong> ${videoInfo.viewH || 'Tidak tersedia'}</p>
+                    <p><strong>Pengarang:</strong> <a href="${videoInfo.url}" target="_blank">${videoInfo.authorName}</a></p>
+                    <p><strong>Diunggah:</strong> ${videoInfo.publishedTime || 'Tidak tersedia'}</p>
+                </div>
             `;
         }
     } catch (error) {
-        loadingDiv.style.display = 'none';
         console.error('Error:', error);
         resultDiv.innerHTML = "<p style='color: red;'>Terjadi kesalahan saat menghubungi server YouTube.</p>";
+    } finally {
+        loadingDiv.style.display = 'none';
     }
 }
 
