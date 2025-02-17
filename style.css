@@ -190,3 +190,126 @@ select {
 .close-button:hover {
     background-color: #0056b3; /* Warna saat hover */
 }
+
+.usage-instructions, .comments-section {
+    background-color: rgba(255, 255, 255, 0.1); /* Latar belakang transparan */
+    border-radius: 10px; /* Membulatkan sudut */
+    padding: 20px; /* Padding untuk konten */
+    margin: 20px 0; /* Jarak atas dan bawah */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Bayangan untuk efek kedalaman */
+}
+
+.usage-instructions h2, .comments-section h2 {
+    color: #ffffff; /* Warna teks judul */
+    font-size: 18px; /* Ukuran font judul */
+    margin-bottom: 10px; /* Jarak bawah judul */
+}
+
+textarea {
+    width: 100%; /* Lebar 100% untuk textarea */
+    height: 100px; /* Tinggi textarea */
+    border-radius: 5px; /* Membulatkan sudut */
+    padding: 10px; /* Padding untuk textarea */
+    border: none; /* Tanpa border */
+    background-color: #333; /* Latar belakang textarea */
+    color: #ffffff; /* Warna teks textarea */
+    font-size: 14px; /* Ukuran font */
+    margin-bottom: 10px; /* Jarak bawah */
+}
+
+.comments-section button {
+    width: 100%; /* Lebar tombol 100% */
+    padding: 10px; /* Padding untuk tombol */
+    border: none; /* Tanpa border */
+    border-radius: 5px; /* Membulatkan sudut tombol */
+    background-color: #007bff; /* Warna tombol */
+    color: white; /* Warna teks tombol */
+    cursor: pointer; /* Menunjukkan bahwa tombol dapat diklik */
+    transition: background-color 0.3s; /* Transisi untuk efek hover */
+}
+
+.comments-section button:hover {
+    background-color: #0056b3; /* Warna saat hover */
+}
+
+#commentsList {
+    margin-top: 10px; /* Jarak atas untuk daftar komentar */
+    text-align: left; /* Rata kiri untuk komentar */
+    color: #ffffff; /* Warna teks komentar */
+}
+
+.feedback-message {
+    margin-top: 10px; /* Jarak atas untuk umpan balik */
+    color: #28a745; /* Warna teks hijau untuk umpan balik positif */
+    font-size: 14px; /* Ukuran font untuk umpan balik */
+    text-align: center; /* Pusatkan teks */
+}
+
+/* Tambahan CSS untuk komentar */
+.comment-container {
+    display: flex; /* Mengatur tampilan flex untuk komentar */
+    align-items: flex-start; /* Memusatkan item secara vertikal */
+    margin-bottom: 15px; /* Jarak bawah untuk setiap komentar */
+}
+
+.comment-container img {
+    width: 40px; /* Lebar gambar profil */
+    height: 40px; /* Tinggi gambar profil */
+    border-radius: 50%; /* Membuat gambar menjadi bulat */
+    margin-right: 10px; /* Jarak antara gambar dan teks komentar */
+}
+
+.comment-container div {
+    display: flex;
+    flex-direction: column; /* Mengatur teks komentar dan nama dalam kolom */
+}
+
+.comment-container p {
+    margin: 0; /* Menghapus margin default pada paragraf */
+    color: #ffffff; /* Warna teks komentar */
+}
+
+.button-download {
+    display: inline-flex; /* Display as flex for better alignment */
+    align-items: center; /* Center the content vertically */
+    background-color: #0056b3; /* Warna latar belakang tombol */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 5px 8px; /* Smaller padding for a smaller button */
+    color: white; /* Text color */
+    text-decoration: none; /* Remove underline */
+    margin-left: 10px; /* Space between text and button */
+    transition: background-color 0.3s; /* Transition for hover effect */
+    font-size: 14px; /* Adjust font size to match existing buttons */
+}
+
+.button-download:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 10px; /* Adjust padding for smaller buttons */
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 3px; /* Rounded corners */
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.prev {
+    left: 10px; /* Position to the left */
+}
+
+.next {
+    right: 10px; /* Position to the right */
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}

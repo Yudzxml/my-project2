@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Downloader untuk YouTube, Instagram, TikTok, dan Spotify. Masukkan URL dan unduh dengan mudah.">
     <link rel="stylesheet" href="style.css">
-    <title>Downloader Project by YudzXML</title>
+    <title>DOWN4EVER PROJECT</title>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
@@ -19,21 +19,21 @@
             <source src="https://raw.githubusercontent.com/Yudzxml/Uploader/main/Yudzxml407.aac" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-</div>
+    </div>
 
     <div id="welcome-notification" class="notification">
-    <div class="notification-content">
-        <h2>WELCOME TO DOWN4EVER BY YUDZXML</h2>
-        <p>Tekan Ok Untuk Melanjutkan!</p>
-        <button id="close-notification" class="close-button">OK</button>
+        <div class="notification-content">
+            <h2>WELCOME TO DOWN4EVER BY YUDZXML</h2>
+            <p>Tekan Ok Untuk Melanjutkan!</p>
+            <button id="close-notification" class="close-button">OK</button>
+        </div>
     </div>
-</div>
 
     <div class="container">
         <h1>DOWN4EVER</h1>
         <p>Masukkan URL video yang ingin Anda unduh di bawah ini:</p>
         <div class="input-group">
-            <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, spotify, atau TikTok" aria-label="URL video">
+            <input type="text" id="url" placeholder="Masukkan URL Video, Instagram, Spotify, atau TikTok" aria-label="URL video">
             <button id="downloadBtn" class="animated-button" aria-label="Tombol unduh">🔎</button>
         </div>
         <select id="quality" aria-label="Pilih kualitas">
@@ -45,12 +45,31 @@
             <span>Downloading...</span>
         </div>
         <div id="result"></div>
+        
+        <!-- Cara Penggunaan -->
+        <div class="usage-instructions">
+            <h2>Cara Penggunaan</h2>
+            <p>1. Masukkan URL video dari YouTube, Instagram, TikTok, atau Spotify ke dalam kolom yang disediakan.</p>
+            <p>2. Pilih type yang diinginkan (Video atau Audio).</p>
+            <p>3. Klik tombol pencarian di samping kolom input untuk memulai proses pengunduhan.</p>
+            <p>4. Tunggu hingga proses selesai dan file akan tersedia untuk diunduh.</p>
+        </div>
+
+        <!-- Komentar Pengguna -->
+<div class="comments-section">
+    <h2>Komentar Pengguna</h2>
+    <textarea id="comment" placeholder="Tinggalkan komentar Anda di sini..." aria-label="Komentar"></textarea>
+    <button id="submitComment" class="animated-button" aria-label="Kirim komentar">Kirim</button>
+    <div id="commentsList"></div>
+    <div id="feedbackMessage" class="feedback-message" style="display: none;"></div> 
+</div>
+
         <div class="contact-owner">
             <button id="contactOwnerBtn" class="animated-button" onclick="contactOwner()" aria-label="Kontak pemilik">ᴄᴏɴᴛᴀᴄᴛ ᴏᴡɴᴇʀ</button>
         </div>
         <div class="copyright">
-    &copy; 2025 Yudzxml. All rights reserved.
-</div>
+            &copy; 2025 Yudzxml. All rights reserved.
+        </div>
     </div>
 
     <script src="script.js"></script>

@@ -7,7 +7,93 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Menangani pengiriman komentar
+document.getElementById('submitComment').addEventListener('click', function() {
+    var comment = document.getElementById('comment').value.trim();
+    var feedbackMessage = document.getElementById('feedbackMessage');
+
+    if (comment === "") {
+        feedbackMessage.textContent = "Silakan tambahkan komentar Anda.";
+        feedbackMessage.style.color = "#dc3545";
+        feedbackMessage.style.display = "block";
+        setTimeout(function() {
+            feedbackMessage.style.display = "none";
+        }, 3000);
+    } else {
+        var commentsList = document.getElementById('commentsList');
+        var newCommentContainer = document.createElement('div');
+        newCommentContainer.className = 'comment-container';
+
+        var profilePic = document.createElement('img');
+        profilePic.src = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+        profilePic.alt = 'Profile Picture';
+
+        var commentTextContainer = document.createElement('div');
+        var commentName = document.createElement('p');
+        commentName.innerHTML = '<strong>Anonymous</strong>';
+        var commentText = document.createElement('p');
+        commentText.textContent = comment;
+
+        commentTextContainer.appendChild(commentName);
+        commentTextContainer.appendChild(commentText);
+        newCommentContainer.appendChild(profilePic);
+        newCommentContainer.appendChild(commentTextContainer);
+        commentsList.appendChild(newCommentContainer);
+
+        // Simpan komentar ke Local Storage
+        saveComment(comment);
+
+        document.getElementById('comment').value = '';
+        feedbackMessage.textContent = "Terima kasih telah mengirimkan komentar Anda!";
+        feedbackMessage.style.color = "#28a745";
+        feedbackMessage.style.display = "block";
+
+        setTimeout(function() {
+            feedbackMessage.style.display = "none";
+            document.getElementById('comment').style.display = "none";
+            document.getElementById('submitComment').style.display = "none";
+        }, 3000);
+    }
+});
+
+// Fungsi untuk menyimpan komentar ke Local Storage
+function saveComment(comment) {
+    let comments = JSON.parse(localStorage.getItem('comments')) || [];
+    comments.push(comment);
+    localStorage.setItem('comments', JSON.stringify(comments));
+}
+
+// Fungsi untuk memuat komentar dari Local Storage saat halaman dimuat
+function loadComments() {
+    let comments = JSON.parse(localStorage.getItem('comments')) || [];
+    comments.forEach(function(comment) {
+        var commentsList = document.getElementById('commentsList');
+        var newCommentContainer = document.createElement('div');
+        newCommentContainer.className = 'comment-container';
+
+        var profilePic = document.createElement('img');
+        profilePic.src = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png?q=60';
+        profilePic.alt = 'Profile Picture';
+
+        var commentTextContainer = document.createElement('div');
+        var commentName = document.createElement('p');
+        commentName.innerHTML = '<strong>Anonymous</strong>';
+        var commentText = document.createElement('p');
+        commentText.textContent = comment;
+
+        commentTextContainer.appendChild(commentName);
+        commentTextContainer.appendChild(commentText);
+        newCommentContainer.appendChild(profilePic);
+        newCommentContainer.appendChild(commentTextContainer);
+        commentsList.appendChild(newCommentContainer);
+    });
+}
+
+// Memuat komentar saat halaman dimuat
+window.onload = loadComments;
+
 document.getElementById('downloadBtn').addEventListener('click', function() {
+  window.onload = loadComments;
     const url = document.getElementById('url').value.trim(); // Menghapus spasi di awal dan akhir
     const quality = document.getElementById('quality').value;
     const resultDiv = document.getElementById('result');
@@ -39,6 +125,7 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
 
 // Fungsi untuk menangani download YouTube
 async function handleYouTubeDownload(url, quality, resultDiv, loadingDiv) {
+   window.onload = loadComments; 
     if (!url) {
         resultDiv.innerHTML = "<p style='color: red;'>URL tidak valid. Silakan masukkan URL YouTube yang benar.</p>";
         return;
@@ -182,6 +269,7 @@ async function handleYouTubeDownload(url, quality, resultDiv, loadingDiv) {
 
 // Fungsi untuk menangani download Instagram
 function handleInstagramDownload(url, resultDiv, loadingDiv) {
+  window.onload = loadComments;
     const apiUrl = `https://api.siputzx.my.id/api/d/igdl?url=${encodeURIComponent(url)}`;
     fetch(apiUrl)
         .then(response => response.json())
@@ -212,34 +300,18 @@ function handleInstagramDownload(url, resultDiv, loadingDiv) {
 
 // Fungsi untuk menangani download TikTok
 function handleTikTokDownload(url, resultDiv, loadingDiv) {
-    const apiUrl = `https://fgsi-tiktok.hf.space/?url=${encodeURIComponent(url)}`;
-    fetch(apiUrl)
+  window.onload = loadComments;
+    const videoApiUrl = `https://fgsi-tiktok.hf.space/?url=${encodeURIComponent(url)}`;
+    fetch(videoApiUrl)
         .then(response => response.json())
         .then(data => {
             loadingDiv.style.display = 'none';
             if (data.status && data.data) {
-                const videoData = data.data;
-                const originalUrl = `https://www.tiktok.com/@${videoData.author.unique_id}/video/${videoData.aweme_id}`;
-                const videoUrls = videoData.video.play_addr.url_list;
-                const musicTitle = videoData.music.title;
-                const musicAuthor = videoData.music.author;
-                resultDiv.innerHTML = `
-                    <h2>Video TikTok</h2>
-                    <p>Original URL: <a href="${originalUrl}" target="_blank">${originalUrl}</a></p>
-                    <p>Deskripsi: ${videoData.desc}</p>
-                    <p>Pengguna: ${videoData.author.nickname} (@${videoData.author.unique_id})</p>
-                    <p>Musik: ${musicTitle} oleh ${musicAuthor}</p>
-                    <h3>Download Links:</h3>
-                    ${videoUrls.map(videoUrl => `
-                        <p>DOWNLOAD LINK:
-                        <a href="${videoUrl}" target="_blank" class="download-button">
-                                <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
-                            </a>
-                        </p>
-                    `).join('')}
-                `;
+                // Jika berhasil mendapatkan video
+                handleTikTokVideoResponse(data, resultDiv);
             } else {
-                resultDiv.innerHTML = "<p style='color: red;'>Terjadi kesalahan saat memproses permintaan TikTok.</p>";
+                // Jika gagal, coba ambil gambar
+                handleTikTokImageDownload(url, resultDiv, loadingDiv);
             }
         })
         .catch(error => {
@@ -249,8 +321,114 @@ function handleTikTokDownload(url, resultDiv, loadingDiv) {
         });
 }
 
+function handleTikTokVideoResponse(data, resultDiv) {
+  window.onload = loadComments;
+    const videoData = data.data;
+    const originalUrl = `https://www.tiktok.com/@${videoData.author.unique_id}/video/${videoData.aweme_id}`;
+    const videoUrls = videoData.video.play_addr.url_list;
+    const musicTitle = videoData.music.title;
+    const musicAuthor = videoData.music.author;
+
+    resultDiv.innerHTML = `
+        <h2>Video TikTok</h2>
+        <p>Original URL: <a href="${originalUrl}" target="_blank">${originalUrl}</a></p>
+        <p>Deskripsi: ${videoData.desc}</p>
+        <p>Pengguna: ${videoData.author.nickname} (@${videoData.author.unique_id})</p>
+        <p>Musik: ${musicTitle} oleh ${musicAuthor}</p>
+        <h3>Download Links:</h3>
+        ${videoUrls.map(videoUrl => `
+            <p>DOWNLOAD LINK:
+                <a href="${videoUrl}" target="_blank" class="download-button">
+                    <img src="https://img.icons8.com/material-outlined/24/ffffff/download.png" alt="Download" />
+                </a>
+            </p>
+        `).join('')}
+    `;
+}
+
+function handleTikTokImageDownload(url, resultDiv, loadingDiv) {
+  window.onload = loadComments;
+    const imageApiUrl = `https://api.agatz.xyz/api/tiktok?url=${encodeURIComponent(url)}`;
+    fetch(imageApiUrl)
+        .then(response => response.json())
+        .then(data => {
+            loadingDiv.style.display = 'none';
+            if (data.status === 200 && data.data.status) {
+                const imageData = data.data;
+                const imageUrls = imageData.data.map(image => image.url); // Mengambil URL gambar
+
+                resultDiv.innerHTML = `
+                    <h2>${imageData.title}</h2>
+                    <h3>Download Images:</h3>
+                `;
+
+                // Jika ada gambar, buat slideshow
+                if (imageUrls.length > 0) {
+                    resultDiv.innerHTML += `
+                        <div class="slideshow-container">
+                            ${imageUrls.map((url, index) => `
+                                <div class="mySlides fade">
+                                    <img src="${url}" style="width:100%">
+                                    <div class="text">Image ${index + 1}</div>
+                                    <a href="${url}" target="_blank" class="button-download">
+                                        <button>Download Image ${index + 1}</button>
+                                    </a>
+                                </div>
+                            `).join('')}
+                            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                        </div>
+                        <br>
+                        <div style="text-align:center">
+                            ${imageUrls.map((_, index) => `
+                                <span class="dot" onclick="currentSlide(${index + 1})"></span>
+                            `).join('')}
+                        </div>
+                    `;
+                    showSlides(1); // Tampilkan slide pertama
+                } else {
+                    resultDiv.innerHTML += "<p style='color: red;'>Tidak ada gambar yang ditemukan.</p>";
+                }
+            } else {
+                resultDiv.innerHTML = "<p style='color: red;'>Terjadi kesalahan saat memproses permintaan gambar.</p>";
+            }
+        })
+        .catch(error => {
+            loadingDiv.style.display = 'none';
+            console.error('Error:', error);
+            resultDiv.innerHTML = "<p style='color: red;'>Terjadi kesalahan saat menghubungi server untuk gambar.</p>";
+        });
+}
+
+let slideIndex = 1;
+
+function plusSlides(n) {
+    showSlides(slideIndex += n);
+}
+
+function currentSlide(n) {
+    showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+    let i;
+    const slides = document.getElementsByClassName("mySlides");
+    const dots = document.getElementsByClassName("dot");
+    if (n > slides.length) { slideIndex = 1 }
+    if (n < 1) { slideIndex = slides.length }
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none"; // Sembunyikan semua slide
+    }
+    for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", ""); // Hapus kelas aktif dari semua dot
+    }
+    slides[slideIndex - 1].style.display = "block"; // Tampilkan slide saat ini
+    dots[slideIndex - 1].className += " active"; // Tambahkan kelas aktif ke dot saat ini
+}
+
 // Fungsi untuk menangani download Spotify
 function handleSpotifyDownload(url, resultDiv, loadingDiv) {
+  window.onload = loadComments;
     const apiUrl = `https://fgsi-spotify.hf.space/?url=${encodeURIComponent(url)}`;
     fetch(apiUrl)
         .then(response => response.json())
@@ -287,9 +465,39 @@ function handleSpotifyDownload(url, resultDiv, loadingDiv) {
             resultDiv.innerHTML = "<p style='color: red;'>Terjadi kesalahan saat menghubungi server Spotify.</p>";
         });
 }
+    // Fungsi untuk menghubungi pemilik
+    function contactOwner() {
+        window.open('https://yudzxml.x-server.web.id/', '_blank');
+    }
 
-function extractVideoId(url) {
-    const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : null
-}
+    // Memutar audio latar belakang
+    var audio = document.getElementById('sound');
+
+    document.addEventListener('click', function() {
+        playAudio();
+    });
+
+    document.addEventListener('mousemove', function() {
+        playAudio();
+    });
+
+    function playAudio() {
+        audio.play().catch(function(error) {
+            console.log("Audio tidak dapat diputar: ", error);
+        });
+    }
+
+    // Menangani pengiriman komentar
+    document.getElementById('submitComment').addEventListener('click', function() {
+        var comment = document.getElementById('comment').value;
+        if (comment) {
+            var commentsList = document.getElementById('commentsList');
+            var newComment = document.createElement('p');
+            newComment.textContent = comment;
+            commentsList.appendChild(newComment);
+            document.getElementById('comment').value = ''; // Mengosongkan textarea setelah komentar dikirim
+        } else {
+            alert('Silakan masukkan komentar Anda.');
+        }
+    });
+window.onload = loadComments;    
